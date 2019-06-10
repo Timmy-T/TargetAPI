@@ -22,4 +22,6 @@ GET,PUT and POST all respond to that URL with an integer ID.
 3. Select any of the requests to run them.
 
 
-Note - Sample price is already populated for Big Lebowski. 
+### Additional Notes
+Sample data price is already populated for Big Lebowski. 
+This application is running on the free-tier of Heroku. That means the first request may take longer to response due to the application being put to sleep. Subsequent requests should be faster.
