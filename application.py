@@ -1,10 +1,25 @@
-from flask import Flask, json
+from flask import Flask, json, request
 import requests
-from requests import HTTPError
+from tinydb import TinyDB, Query
 
 from models import *
 
 app = Flask(__name__)
+db = TinyDB('db.json')
+
+
+def initialize_DB():
+    """
+    Initializes the database with a single row and price data point for Big Lebowski
+    :return: None
+    """
+
+    app.logger.info("Purging Database")
+    db.purge()
+
+    app.logger.info("Populating Database")
+    sample_product = {'id': 13860428, 'price': '13.49', 'currency': 'USD'}
+    db.insert(sample_product)
 
 
 @app.route('/')
@@ -12,7 +27,7 @@ def base():
     return "Hello you seem to be lost. Please check /products/{id} for more meaningful product information", 404
 
 
-@app.route('/products/<id>', methods=['GET'])
+@app.route('/products/<int:id>', methods=['GET'])
 def get_product_by_id(id):
     """
     Gets Product information from RedSky API and NoSQL DB
@@ -27,11 +42,11 @@ def get_product_by_id(id):
            "rating_and_review_statistics,question_answer_statistics").format(id)
 
     response = requests.get(url)
-    # Checks for any errors raised
+
     try:
         response.raise_for_status()
 
-    except HTTPError:
+    except requests.HTTPError:
         if response.status_code == 404:
             return json.jsonify('Product ID:{0} not found'.format(id)), 404
 
@@ -47,6 +62,13 @@ def get_product_by_id(id):
     name = product_data['product']['item']['product_description']['title']
 
     product = Product(id=id, name=name)
+
+    Price = Query()
+    result = db.get(Price.id == id)
+
+    if result is not None:
+        product.current_price = PriceData(result["price"], result["currency"])
+
     return json.jsonify(ProductSchema().dump(product).data)
 
 
@@ -60,7 +82,15 @@ def set_product_by_id(id):
              4XX, 5XX - Error response and matching code
     """
     # Updates product info and returns newly updated info
-    return id
+    data = request.get_json()
+    price_data = data['current_price']
+
+    if price_data is not None and price_data is not []:
+        Price = Query()
+        db.upsert({'id':id, 'price': price_data['value'], 'currency': price_data['currency_code']}, Price.id == id)
+        return get_product_by_id(id)
+
 
 if __name__ == "__main__":
+    initialize_DB()
     app.run()
