@@ -62,5 +62,5 @@ def set_product_by_id(id):
     # Updates product info and returns newly updated info
     return id
 
-
-app.run()
+if __name__ == "__main__":
+    app.run()
