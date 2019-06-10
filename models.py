@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields
 
 
 class PriceDataSchema(Schema):
@@ -13,9 +13,6 @@ class ProductSchema(Schema):
     name = fields.Str()
     current_price = fields.Nested(PriceDataSchema)
 
-    @post_load
-    def load_product(self, data):
-        return Product(**data)
 
 class Product:
     def __init__(self, id, name, price_data=None):

@@ -1,5 +1,5 @@
-from flask import Flask, json, request
 import requests
+from flask import Flask, json, request
 from tinydb import TinyDB, Query
 
 from models import *
@@ -8,7 +8,7 @@ app = Flask(__name__)
 db = TinyDB('db.json')
 
 
-def initialize_DB():
+def initialize_db():
     """
     Initializes the database with a single row and price data point for Big Lebowski
     :return: None
@@ -52,7 +52,7 @@ def get_product_by_id(id):
 
         # If non-404 error propagate
         app.logger.error("An error has occurred:" + str(response.status_code))
-        return json.jsonify('An error has occured'.format(id)), response.status_code
+        return json.jsonify('An error has occurred'.format(id)), response.status_code
 
     except Exception as err:
         app.logger.error("An error has occurred:" + str(err))
@@ -61,22 +61,29 @@ def get_product_by_id(id):
     product_data = response.json()
     name = product_data['product']['item']['product_description']['title']
 
-    product = Product(id=id, name=name)
-
-    Price = Query()
-    result = db.get(Price.id == id)
-
-    if result is not None:
-        product.current_price = PriceData(result["price"], result["currency"])
+    product = Product(id=id, name=name, price_data=__get_price_data(id))
 
     return json.jsonify(ProductSchema().dump(product).data)
 
 
-@app.route('/products/<int:id>', methods=['PUT', 'POST'])
-def set_product_by_id(id):
+def __get_price_data(id):
     """
-    Updates Product Price data in NoSQL datastore
-    :param id: ID to update
+    Fetches Price Data object from data store
+    :param id: Product ID
+    :return: PriceData model if found or None
+    """
+    price_query = Query()
+    result = db.get(price_query.id == id)
+    if result is not None:
+        return PriceData(result["price"], result["currency"])
+    return None
+
+
+@app.route('/products/<int:id>', methods=['PUT', 'POST'])
+def set_product_price_by_id(id):
+    """
+    Updates Product Price data in NoSQL data store
+    :param id: ID to update - Unique Key
     :return: 200 - Product data with updated price
              404 - Product not found
              4XX, 5XX - Error response and matching code
@@ -87,10 +94,10 @@ def set_product_by_id(id):
 
     if price_data is not None and price_data is not []:
         Price = Query()
-        db.upsert({'id':id, 'price': price_data['value'], 'currency': price_data['currency_code']}, Price.id == id)
+        db.upsert({'id': id, 'price': price_data['value'], 'currency': price_data['currency_code']}, Price.id == id)
         return get_product_by_id(id)
 
 
 if __name__ == "__main__":
-    initialize_DB()
+    initialize_db()
     app.run()
