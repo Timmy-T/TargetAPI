@@ -1,43 +1,66 @@
-from flask import Flask
+from flask import Flask, json
 import requests
 from requests import HTTPError
 
+from models import *
+
 app = Flask(__name__)
+
 
 @app.route('/')
 def base():
-    return "Hello you seem to be lost. Please check /products/{id} for more meaningful product information"
+    return "Hello you seem to be lost. Please check /products/{id} for more meaningful product information", 404
 
 
 @app.route('/products/<id>', methods=['GET'])
 def get_product_by_id(id):
+    """
+    Gets Product information from RedSky API and NoSQL DB
+    :param id: Product ID - Unique Key
+    :return: 200 - Product Model
+             4XX, 5XX - Error Msg and matching response code
+    """
 
-    # Builds URL for Redsky to get actual data
-    url = "https://redsky.target.com/v2/pdp/tcin/{}?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics".format(id)
+    # Builds URL for RedSky endpoint
+    url = ("https://redsky.target.com/v2/pdp/tcin/{0}"
+           "?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,"
+           "rating_and_review_statistics,question_answer_statistics").format(id)
 
-
-    # Returns JSON object of product with given ID
     response = requests.get(url)
-
+    # Checks for any errors raised
     try:
         response.raise_for_status()
 
-    except HTTPError as http_err:
-        return 'An error has occurred:' + http_err
+    except HTTPError:
+        if response.status_code == 404:
+            return json.jsonify('Product ID:{0} not found'.format(id)), 404
+
+        # If non-404 error propagate
+        app.logger.error("An error has occurred:" + str(response.status_code))
+        return json.jsonify('An error has occured'.format(id)), response.status_code
 
     except Exception as err:
-        return 'An error has occurred:' + err
+        app.logger.error("An error has occurred:" + str(err))
+        return json.jsonify('An error has occurred'), 500
 
+    product_data = response.json()
+    name = product_data['product']['item']['product_description']['title']
 
-    print(response.text)
-    return id
+    product = Product(id=id, name=name)
+    return json.jsonify(ProductSchema().dump(product).data)
+
 
 @app.route('/products/<int:id>', methods=['PUT', 'POST'])
 def set_product_by_id(id):
+    """
+    Updates Product Price data in NoSQL datastore
+    :param id: ID to update
+    :return: 200 - Product data with updated price
+             404 - Product not found
+             4XX, 5XX - Error response and matching code
+    """
     # Updates product info and returns newly updated info
     return id
-
-
 
 
 app.run()
