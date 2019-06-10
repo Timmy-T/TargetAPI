@@ -1,0 +1,279 @@
+{
+	"info": {
+		"_postman_id": "4e1b2e90-a0b2-4af2-b8b5-b334df63cac2",
+		"name": "TargetAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Nothing",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://flask-targetapi.herokuapp.com/products/123",
+					"protocol": "https",
+					"host": [
+						"flask-targetapi",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"products",
+						"123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Base URL",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://flask-targetapi.herokuapp.com/",
+					"protocol": "https",
+					"host": [
+						"flask-targetapi",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Conan",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://flask-targetapi.herokuapp.com/products/13860427",
+					"protocol": "https",
+					"host": [
+						"flask-targetapi",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"products",
+						"13860427"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Big Lebowski",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://flask-targetapi.herokuapp.com/products/13860428",
+					"protocol": "https",
+					"host": [
+						"flask-targetapi",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"products",
+						"13860428"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Big Lebowski",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"current_price\": {\n        \"currency_code\": \"USD\",\n        \"value\": \"13.50\"\n    },\n    \"id\": 13860428,\n    \"name\": \"The Big Lebowski (Blu-ray)\"\n}"
+				},
+				"url": {
+					"raw": "https://flask-targetapi.herokuapp.com/products/13860428",
+					"protocol": "https",
+					"host": [
+						"flask-targetapi",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"products",
+						"13860428"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put Big Lebowski",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"current_price\": {\n        \"currency_code\": \"USD\",\n        \"value\": \"13.49\"\n    },\n    \"id\": 13860428,\n    \"name\": \"The Big Lebowski (Blu-ray)\"\n}"
+				},
+				"url": {
+					"raw": "https://flask-targetapi.herokuapp.com/products/13860428",
+					"protocol": "https",
+					"host": [
+						"flask-targetapi",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"products",
+						"13860428"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get SpongeBob",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://flask-targetapi.herokuapp.com/products/13860429",
+					"protocol": "https",
+					"host": [
+						"flask-targetapi",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"products",
+						"13860429"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post SpongeBob",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"current_price\": {\n        \"currency_code\": \"USD\",\n        \"value\": \"63.49\"\n    },\n    \"id\": 13860429,\n    \"name\": \"SpongeBob SquarePants: SpongeBob's Frozen Face-off\"\n}"
+				},
+				"url": {
+					"raw": "https://flask-targetapi.herokuapp.com/products/13860429",
+					"protocol": "https",
+					"host": [
+						"flask-targetapi",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"products",
+						"13860429"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

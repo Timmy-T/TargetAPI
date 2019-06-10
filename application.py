@@ -93,9 +93,15 @@ def set_product_price_by_id(id):
     price_data = data['current_price']
 
     if price_data is not None and price_data is not []:
-        Price = Query()
-        db.upsert({'id': id, 'price': price_data['value'], 'currency': price_data['currency_code']}, Price.id == id)
-        return get_product_by_id(id)
+        try:
+            value = '%.2f' % float(price_data['value'])
+            Price = Query()
+            db.upsert({'id': id, 'price': value, 'currency': price_data['currency_code']}, Price.id == id)
+            return get_product_by_id(id)
+
+        except ValueError:
+            pass  # We pass because we are checking if price is valid
+        return "Invalid Currency Value", 400
 
 
 if __name__ == "__main__":
